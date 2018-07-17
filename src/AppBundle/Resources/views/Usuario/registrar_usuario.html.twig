@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+{%block titulo%}Registrar Usuario{%endblock%}
+{% block menu_usuario %}class="active"{% endblock %}
+{% block body %}
+    <h1>Registrar Usuario</h1>
+    <form>
+        <div class="form-group">
+            <label>Nombre</label>
+            <input id="nombre">
+
+            <label>Username</label>
+            <input id="username" >
+
+            <label>Tipo De Usuario</label>
+            <select id="tipo" >
+                <option value="Normal">Normal</option>
+                <option value="Tecnico">Tecnico</option>
+            </select>
+
+            <label>Contraseña</label>
+            <input type="password" id="contrasena">
+        <div>
+        <button type="button" class="btn btn-primary" onclick="registrar()"> Guardar</button>
+    </form>
+
+    <script>
+        function registrar(){
+            var nombre = $('#nombre').val();
+            var username = $('#username').val();
+            var tipo = $('#tipo').val();
+            var contrasena = $('#contrasena').val();
+
+            var data = {
+                    nombre: nombre,
+                    username: username,
+                    tipoUsuario: tipo,
+                    contrasena: contrasena
+            };
+            $.ajax({
+                url: Routing.generate('guardar_usuarios'),
+                type:'POST',
+                data:JSON.stringify(data),
+                success: function(response){
+                    window.location.href = Routing.generate('lista_usuario');
+                    console.log(response);
+                },
+                error: function(err){
+                    console.log(err);
+                }
+            })
+
+        }
+
+    </script>
+{% endblock %}
