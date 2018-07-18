@@ -9,6 +9,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Usuario;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 class UsuarioController extends Controller
 {
@@ -153,13 +156,24 @@ class UsuarioController extends Controller
 
         if ($form->isValid()){
 
-            $jsonContent = $this->get('serializer')->serialize($usuario,'json');
-            $jsonContent = json_decode($jsonContent,true);
+//            $jsonContent = $this->get('serializer')->serialize($usuario,'json');
+//            $jsonContent = json_decode($jsonContent,true);
+
+            $normalizer = new ObjectNormalizer();
+            $normalizer->setCircularReferenceLimit(1);
+            // Add Circular reference handler
+            // Add Circular reference handler
+            $normalizer->setCircularReferenceHandler(function ($object) {
+                return $object->getId();
+            });
+            $normalizers = array($normalizer);
+            $encoders = array(new JsonEncoder());
+            $serializer = new Serializer($normalizers, $encoders);
 
             $em = $this->getDoctrine()->getManager();
             $em->flush();
 
-            return new JsonResponse($jsonContent);
+            return new JsonResponse($serializer);
         }
 
         //$form->getErrors();
