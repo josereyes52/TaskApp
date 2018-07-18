@@ -24,6 +24,25 @@ class DefaultController extends Controller
             'error' => $error,
         ));
     }
+
+    /**
+     * @Route("/logout", name="logout")
+     */
+    public function logoutAction(Request $request){
+        $session = $request->getSession();
+
+        // get the login error if there is one
+        $error = $session->get(SecurityContextInterface::AUTHENTICATION_ERROR);
+        $session->remove(SecurityContextInterface::AUTHENTICATION_ERROR);
+
+        return $this->render('@App/Usuario/iniciar_sesion.html.twig', array(
+            'last_username' => $session->get(SecurityContextInterface::LAST_USERNAME),
+            'error' => $error,
+        ));
+    }
+
+
+
     /**
      * @Route("/", name="homepage")
      */
