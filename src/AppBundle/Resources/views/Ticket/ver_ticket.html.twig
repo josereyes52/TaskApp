@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+{%block titulo%}Ticket{%endblock%}
+{%block logout %}Logout{%endblock%}
+{% block menu_ticket %}class="active"{% endblock %}
+{% block body %}
+    <div style="text-align: left;">
+        <h1 style="display:inline-block;width: 45%;">Asignación #{{ ticket.id }}</h1>
+        <span>{{ ticket.fechaCompletada|date('Y-m-d H:i:s') }}</span>
+        <span><button style="text-transform: uppercase;" class = "btn btn-primary" onclick="actualizarEstato()">Iniciar</button></span>
+        <br>
+        <span class="label label-primary" id="estado">{{ ticket.estado}}</span>
+    </div>
+    <div style="width: 49%; display: inline-block; text-align: left; margin-top: 50px;">
+        <label for="">Solicitado Por:</label>
+        <span><strong>{{ ticket.usuario.nombre }}</strong></span><br>
+        <label for="">Descripcion:</label>
+        <span>{{ ticket.descripcion }}</span>
+    </div>
+    <form style="width: 49%; display: inline-block;">
+        <div class="form-group">
+            <h3 style="display:inline-block;width: 100px;">Notas</h3>
+            <span><button style ="padding-top: 0px;padding-bottom: 4px;"class = "btn btn-success">Agregar Notas</button></span>
+        <div>
+    </form>
+    <input type="hidden" id="id" value="{{ ticket.id }}">
+    <input type="hidden" id="id" value="{{ ticket.id }}">
+
+    <script>
+        function actualizarEstato(){
+            var id = $('#id').val();
+            var estado = $('#estado').text();
+            var descripcion = $('#estado').text();
+
+            var data = {
+                    estado: estado
+            };
+            $.ajax({
+                url: Routing.generate('actualizar_ticket', {id: id}),
+                type:'PUT',
+                data:JSON.stringify(data),
+                success: function(response){
+                   //indow.location.href = Routing.generate('lista_usuario');
+                    console.log(response);
+                },
+                error: function(err){
+                    console.log(err);
+                }
+            })
+
+        }
+
+    </script>
+{% endblock %}

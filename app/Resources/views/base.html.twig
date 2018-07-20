@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
-    <title>App - {% block titulo %}{% endblock %}</title>
+    {#<title>App - {% block titulo %}{% endblock %}</title>#}
     <link href="{{asset('assets/css/ie10-viewport-bug-workaround.css')}}" rel="stylesheet">
     <link href="{{asset('assets/css/starter-template.css')}}" rel="stylesheet">
     <script src="{{asset('assets/js/ie-emulation-modes-warning.js')}}"></script>
@@ -29,9 +29,15 @@
             <div id="navbar" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
                     <li {% block menu_usuario %}{% endblock %}><a href="{{ path('lista_usuario') }}">Usuarios</a></li>
-                    {#<li {% block menu_tarea %}{% endblock %}><a href="{{ path('lista_ticket') }}">Tareas</a></li>#}
+                    <li {% block menu_ticket %}{% endblock %}><a href="{{ path('lista_ticket') }}">Tickets</a></li>
                     <li><a href="#contact">Contact</a></li>
+
                 </ul>
+
+                    <ul style="float:right;" class="nav navbar-nav">
+                        <li ><a href="{{ path("login") }}">{% block logout %}{% endblock %}</a></li>
+                    </u
+
             </div>
         </div>
     </nav>

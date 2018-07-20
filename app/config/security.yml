@@ -44,3 +44,4 @@ security:
 
     access_control:
             - { path: ^/usuario, roles: IS_AUTHENTICATED_FULLY }
+            - { path: ^/ticket, roles: IS_AUTHENTICATED_FULLY }

@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+{%block titulo%}Ticket{%endblock%}
+{%block logout %}Logout{%endblock%}
+{% block menu_ticket %}class="active"{% endblock %}
+{% block body %}
+    <h1>Listas De Ticket</h1>
+    <table class="table table-striped">
+    	<thead>
+    		<th scope="col">#ID</th>
+    		<th scope="col">Fecha Creada</th>
+            <th scope="col">Fecha A Completar</th>
+            <th scope="col">Estado</th>
+            <th scope="col">Creado Por</th>
+            <th scope="col">Asignado A</th>
+    		<th scope="col">Acciones</th>
+    	</thead>
+    	<tbody>
+    	{% for ticket in tickets %}
+    		<tr>
+    			<td>{{ ticket.id}}</td>
+    			<td>{{ ticket.fechaCreada|date('Y-m-d H:i:s')}}</td>
+    			<td>{{ ticket.fechaCompletada|date('Y-m-d H:i:s') }}</td>
+                <td>{{ ticket.estado}}</td>
+                <td>{{ ticket.usuario.nombre}}</td>
+                <td>{{ ticket.usuarioAsignado.nombre}}</td>
+    			<td>
+    				<a href="{{ path('ver_ticket',{'id':ticket.id}) }}" class="btn btn-success">Ver</a>
+    				<button onclick="eliminar('')" class = "btn btn-primary">Iniciar</button>
+    			</td>
+    		<tr>
+    	{% endfor %}
+    	</tbody>
+    </table>
+    <script>
+        function eliminar(id){
+            $.ajax({
+                url:'/app_dev.php/usuario/'+id,
+                type:'DELETE',
+                success: function(response){
+                    window.location.href=window.location
+                    // console.log(response);
+                },
+                error: function(err){
+                    console.log(err);
+                }
+            })
+
+        }
+
+    </script>
+{% endblock %}
