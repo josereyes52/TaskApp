@@ -5,7 +5,9 @@
 {% block body %}
     <h1>Listas De Ticket</h1>
     {% if role == "Normal" %}
-        <button type="button" class="btn btn-primary btn-circle btn-lg" style="padding: 11px 11px 7px; border-radius: 20px; float: right; margin-bottom: 15px; "><i class="fas fa-plus fa-lg"></i></button>
+        <a type="button"   href="{{ path('agregar_ticket') }}" class="btn btn-primary btn-circle btn-lg" style="padding: 11px 11px 7px; border-radius: 20px; float: right; margin-bottom: 15px; ">
+            <i class="fas fa-plus fa-lg"></i>
+        </a>
     {% endif %}
     <table class="table table-striped">
     	<thead>

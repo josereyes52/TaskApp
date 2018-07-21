@@ -87,22 +87,32 @@ class TicketController extends Controller
      * @param Request $request
      */
     public function guardarTicket(Request $request){
-//        var_dump($request);die;
         $data = json_decode($request->getContent(), true);
         $ticket = new ticket();
+//        var_dump($ticket);die;
         $form = $this->createForm(TicketType::class, $ticket);
         $form->submit($data);
+        $normalizer = new ObjectNormalizer();
+        $normalizer->setCircularReferenceLimit(1);
 
-        $jsonContent = $this->get('serializer')->serialize($ticket,'json');
+        $normalizer->setCircularReferenceHandler(function ($object) {
+            return $object->getId();
+        });
+
+        $normalizers = array($normalizer);
+        $encoders = array(new JsonEncoder());
+        $serializer = new Serializer($normalizers, $encoders);
+
+//        $jsonContent = $this->get('serializer')->serialize($ticket,'json');
 
         $em = $this->getDoctrine()->getManager();
         //persist is to save
         $em->persist($ticket);
 
         $em->flush();
-        $jsonContent = json_decode($jsonContent,true);
+//        $jsonContent = json_decode($serializer,true);
 
-        return new JsonResponse($jsonContent);
+        return new JsonResponse(array("response"=>'Added' ) );
     }
 
 

@@ -12,14 +12,15 @@
             <label>Asignar A:</label>
             {% for usuario in usuarios %}
                 <select id="usuario" >
+                    <option value="">Choose A User</option>
                     <option value="{{ usuario.id }}">{{ usuario.nombre }}</option>
                 </select>
             {% endfor %}
             <br>
             <label>Descipcion</label><br>
-            <textarea id="descipcion" rows="4" cols="50" ></textarea>
-            <input type="hidden" id="usuarioCreador" value="{{ usuarioActivo.id }}">
-            <input type="hidden" id="fechaCreado" value="{{ usuarioActivo.id }}">
+            <textarea id="descripcion" rows="4" cols="50" ></textarea>
+            <input type="hidden" id="usuarioCreador" value="{{ usuarioActivo }}">
+            <input type="hidden" id="fechaCreado" value="{{ fechaCreado }}">
 
         <div>
         <button type="button" class="btn btn-primary" onclick="registrar()"> Guardar</button>
@@ -27,26 +28,30 @@
 
     <script>
         function registrar(){
-            var fecha = $('#date').val();
-            var usuario = $('#usuario').val();
-            var descipcion = $('#descipcion').val();
+            var fecha = $('#fechaCompletar').val();
+            var usuarioAsignado = $('#usuario').val();
+            var descripcion = $('#descripcion').val();
             var fechaCreada = $('#fechaCreado').val();
+            var usuario = $('#usuarioCreador').val();
 
 
             var data = {
-                    fechaCompletar: fecha,
-                    usuarioAsignado: usuario,
-                    descipcion: descipcion,
+                    fecha_Completada: fecha,
+                    usuarioAsignado: usuarioAsignado,
+                    usuario:usuario,
+                    descripcion: descripcion,
                     estado:'Pendiente',
-                    fechaCreada: fechaCreada
+                    fecha_Creada: fechaCreada
             };
             $.ajax({
                 url: Routing.generate('guardar_ticket'),
                 type:'POST',
                 data:JSON.stringify(data),
                 success: function(response){
-                    console.log(response);
-                    // window.location.href = Routing.generate('lista_ticket');
+                    if (response.response == "Added"){
+
+                        window.location.href = Routing.generate('lista_ticket');
+                    }
                 },
                 error: function(err){
                     console.log(err);

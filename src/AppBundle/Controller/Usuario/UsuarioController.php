@@ -148,6 +148,8 @@ class UsuarioController extends Controller
 
 //            $jsonContent = $this->get('serializer')->serialize($usuario,'json');
 //            $jsonContent = json_decode($jsonContent,true);
+            $em = $this->getDoctrine()->getManager();
+            $em->flush();
 
             $normalizer = new ObjectNormalizer();
             $normalizer->setCircularReferenceLimit(1);
@@ -160,8 +162,7 @@ class UsuarioController extends Controller
             $encoders = array(new JsonEncoder());
             $serializer = new Serializer($normalizers, $encoders);
 
-            $em = $this->getDoctrine()->getManager();
-            $em->flush();
+
 
             return new JsonResponse($serializer);
         }
