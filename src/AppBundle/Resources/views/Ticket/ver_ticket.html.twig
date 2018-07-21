@@ -5,16 +5,18 @@
 {% block body %}
     <div style="text-align: left;">
         <h1 style="display:inline-block;width: 45%;">Asignación #{{ ticket.id }}</h1>
-        <span>{{ ticket.fechaCompletada|date('Y-m-d H:i:s') }}</span>
-        <span><button style="text-transform: uppercase;" class = "btn btn-primary" onclick="actualizarEstato()">Iniciar</button></span>
+        <span id="fechaCompletada">{{ ticket.fechaCompletada|date('Y-m-d H:i:s') }}</span>
+        {% if ticket.estado != "Listo" %}
+            <span><button style="text-transform: uppercase;" class = "btn btn-primary" onclick="actualizarEstato()">Iniciar</button></span>
+        {% endif %}
         <br>
-        <span class="label label-primary" id="estado">{{ ticket.estado}}</span>
+        <span class="label {% if ticket.estado == "Listo" %} label-success {% else %} label-primary" {% endif %}id="estado">{{ ticket.estado}}</span>
     </div>
     <div style="width: 49%; display: inline-block; text-align: left; margin-top: 50px;">
         <label for="">Solicitado Por:</label>
-        <span><strong>{{ ticket.usuario.nombre }}</strong></span><br>
+        <span><strong >{{ ticket.usuario.nombre }}</strong></span><br>
         <label for="">Descripcion:</label>
-        <span>{{ ticket.descripcion }}</span>
+        <span id="descripcion">{{ ticket.descripcion }}</span>
     </div>
     <form style="width: 49%; display: inline-block;">
         <div class="form-group">
@@ -23,16 +25,36 @@
         <div>
     </form>
     <input type="hidden" id="id" value="{{ ticket.id }}">
-    <input type="hidden" id="id" value="{{ ticket.id }}">
+    <input type="hidden" id="usuarioId" value="{{ ticket.usuario.id }}">
+    <input type="hidden" id="usuarioAsignadoId" value="{{ ticket.usuarioAsignado.id }}">
+    <input type="hidden" id="fechaCreada" value="{{ ticket.fechaCreada|date('Y-m-d H:i:s') }}">
 
     <script>
         function actualizarEstato(){
             var id = $('#id').val();
             var estado = $('#estado').text();
-            var descripcion = $('#estado').text();
+            var descripcion = $('#descripcion').text();
+            var usuarioId = $('#usuarioId').val();
+            var usuarioAsignadoId =$('#usuarioAsignadoId').val();
+            var fechaCompletada = $('#fechaCompletada').text();
+            var fechaCreada = $('#fechaCreada').val();
+
+            if (estado == "Pendiente"){
+                estado = "EN_PROCESO";
+            }else if (estado == "EN_PROCESO"){
+                estado = "Listo";
+            }else if (estado == "Listo"){
+                estado = "EN_PROCESO";
+            }
 
             var data = {
-                    estado: estado
+                    estado: estado,
+                    descripcion:descripcion,
+                    usuario:usuarioId,
+                    usuarioAsignado:usuarioAsignadoId,
+                    fecha_Completada:fechaCompletada,
+                    fecha_Creada:fechaCreada
+
             };
             $.ajax({
                 url: Routing.generate('actualizar_ticket', {id: id}),
@@ -41,6 +63,10 @@
                 success: function(response){
                    //indow.location.href = Routing.generate('lista_usuario');
                     console.log(response);
+                    $("#estado").text(response.estado);
+                    if (response.estado == "Listo"){
+                        $("#estado").attr("class","label label-success");
+                    }
                 },
                 error: function(err){
                     console.log(err);

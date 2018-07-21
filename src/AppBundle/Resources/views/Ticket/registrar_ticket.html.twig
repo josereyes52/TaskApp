@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+{%block titulo%}Registrar Ticket{%endblock%}
+{% block menu_ticket %}class="active"{% endblock %}
+{% block body %}
+    <h1>Registrar Ticket</h1>
+
+    <form>
+        <div class="form-group">
+            <label>Fecha a completar:</label>
+            <input type="date" id="fechaCompletar">
+
+            <label>Asignar A:</label>
+            {% for usuario in usuarios %}
+                <select id="usuario" >
+                    <option value="{{ usuario.id }}">{{ usuario.nombre }}</option>
+                </select>
+            {% endfor %}
+            <br>
+            <label>Descipcion</label><br>
+            <textarea id="descipcion" rows="4" cols="50" ></textarea>
+            <input type="hidden" id="usuarioCreador" value="{{ usuarioActivo.id }}">
+            <input type="hidden" id="fechaCreado" value="{{ usuarioActivo.id }}">
+
+        <div>
+        <button type="button" class="btn btn-primary" onclick="registrar()"> Guardar</button>
+    </form>
+
+    <script>
+        function registrar(){
+            var fecha = $('#date').val();
+            var usuario = $('#usuario').val();
+            var descipcion = $('#descipcion').val();
+            var fechaCreada = $('#fechaCreado').val();
+
+
+            var data = {
+                    fechaCompletar: fecha,
+                    usuarioAsignado: usuario,
+                    descipcion: descipcion,
+                    estado:'Pendiente',
+                    fechaCreada: fechaCreada
+            };
+            $.ajax({
+                url: Routing.generate('guardar_ticket'),
+                type:'POST',
+                data:JSON.stringify(data),
+                success: function(response){
+                    console.log(response);
+                    // window.location.href = Routing.generate('lista_ticket');
+                },
+                error: function(err){
+                    console.log(err);
+                }
+            })
+
+        }
+
+    </script>
+{% endblock %}

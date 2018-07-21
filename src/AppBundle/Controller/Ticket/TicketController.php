@@ -21,15 +21,39 @@ class TicketController extends Controller
 	 * @Route("/ticket", options={"expose"=true} ,name="lista_ticket")
 	 */
 	public function indexTickets(){
+	    $role = $this->getUser()->getRoles()[0];
 		 $tickets = $this->getDoctrine()
 		 	->getRepository(ticket::class)
 		 	->findAll();
 		return $this->render("@App/Ticket/lista_ticket.html.twig",
 			[
 				"tickets" => $tickets,
+                "role" => $role
 			]
 		);
 	}
+
+    /**
+     *
+     * @Route("/ticket/registrar", options={"expose"=true} ,name="agregar_ticket")
+     */
+    public function indexAgregarTickets(){
+
+        $role = $this->getUser()->getRoles()[0];
+        $usuarioActivo = $this->getUser()->getId();
+        $fechaCreado = date("Y-m-d");
+        $usuarios = $this->getDoctrine()
+            ->getRepository(Usuario::class)
+            ->findBy(["tipoUsuario"=>'Tecnico']);
+        return $this->render("@App/Ticket/registrar_ticket.html.twig",
+            [
+                "usuarios" => $usuarios,
+                "role" => $role,
+                "usuarioActivo" => $usuarioActivo,
+                "fechaCreado" => $fechaCreado
+            ]
+        );
+    }
 
     /**
      *
@@ -56,6 +80,31 @@ class TicketController extends Controller
 
 
 
+    /**
+     *
+     * @Route("/rest/ticket/registrar", options={"expose"=true} ,name = "guardar_ticket")
+     * @Method("POST")
+     * @param Request $request
+     */
+    public function guardarTicket(Request $request){
+//        var_dump($request);die;
+        $data = json_decode($request->getContent(), true);
+        $ticket = new ticket();
+        $form = $this->createForm(TicketType::class, $ticket);
+        $form->submit($data);
+
+        $jsonContent = $this->get('serializer')->serialize($ticket,'json');
+
+        $em = $this->getDoctrine()->getManager();
+        //persist is to save
+        $em->persist($ticket);
+
+        $em->flush();
+        $jsonContent = json_decode($jsonContent,true);
+
+        return new JsonResponse($jsonContent);
+    }
+
 
     /**
      *
@@ -72,8 +121,8 @@ class TicketController extends Controller
         $form = $this->createForm(TicketType::class, $ticket);
         $form->submit($data);
 
-        if ($form->isValid()){
-            var_dump("neka");die;
+//        if ($form->isValid()){
+//            var_dump("neka");die;
 
             $normalizer = new ObjectNormalizer();
             $normalizer->setCircularReferenceLimit(1);
@@ -89,10 +138,12 @@ class TicketController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->flush();
 
-            return new JsonResponse($serializer);
-        }
+            return new JsonResponse( array("estado"=>$ticket->getEstado() ) );
 
-        //$form->getErrors();
-        return new JsonResponse(null, 400);
+//            return new JsonResponse($serializer);
+//        }
+
+//        return $form->getViewData();
+//        return new JsonResponse(null, 400);
     }
 }

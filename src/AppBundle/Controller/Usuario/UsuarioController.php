@@ -59,16 +59,6 @@ class UsuarioController extends Controller
 
     }
 
-    /**
-     *
-     * @Route("/login", name = "iniciar_sesion")
-     */
-
-    public function indexLoginUsuario(){
-
-        return $this->render("@App/Usuario/iniciar_sesion.html.twig");
-
-    }
 
 	/**
 	 *

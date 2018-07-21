@@ -4,6 +4,9 @@
 {% block menu_ticket %}class="active"{% endblock %}
 {% block body %}
     <h1>Listas De Ticket</h1>
+    {% if role == "Normal" %}
+        <button type="button" class="btn btn-primary btn-circle btn-lg" style="padding: 11px 11px 7px; border-radius: 20px; float: right; margin-bottom: 15px; "><i class="fas fa-plus fa-lg"></i></button>
+    {% endif %}
     <table class="table table-striped">
     	<thead>
     		<th scope="col">#ID</th>
@@ -25,7 +28,9 @@
                 <td>{{ ticket.usuarioAsignado.nombre}}</td>
     			<td>
     				<a href="{{ path('ver_ticket',{'id':ticket.id}) }}" class="btn btn-success">Ver</a>
-    				<button onclick="eliminar('')" class = "btn btn-primary">Iniciar</button>
+    				{% if ticket.estado != "Listo" %}
+                        <button onclick="eliminar('')" class = "btn btn-primary">Iniciar</button>
+                    {% endif %}
     			</td>
     		<tr>
     	{% endfor %}
