@@ -21,10 +21,19 @@ class TicketController extends Controller
 	 * @Route("/ticket", options={"expose"=true} ,name="lista_ticket")
 	 */
 	public function indexTickets(){
-	    $role = $this->getUser()->getRoles()[0];
-		 $tickets = $this->getDoctrine()
-		 	->getRepository(ticket::class)
-		 	->findAll();
+        $role = $this->getUser()->getRoles()[0];
+        $tickets = null;
+            if ($role == "Normal"){
+                $tickets = $this->getDoctrine()
+                    ->getRepository(ticket::class)
+                    ->findBy(['usuario' => $this->getUser()->getID()]);
+
+            }else{
+                $tickets = $this->getDoctrine()
+                    ->getRepository(ticket::class)
+                    ->findBy(['usuarioAsignado' => $this->getUser()->getID()]);
+            }
+
 		return $this->render("@App/Ticket/lista_ticket.html.twig",
 			[
 				"tickets" => $tickets,

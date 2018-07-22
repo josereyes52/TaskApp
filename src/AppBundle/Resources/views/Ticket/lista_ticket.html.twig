@@ -30,7 +30,7 @@
                 <td>{{ ticket.usuarioAsignado.nombre}}</td>
     			<td>
     				<a href="{{ path('ver_ticket',{'id':ticket.id}) }}" class="btn btn-success">Ver</a>
-    				{% if ticket.estado != "Listo" %}
+                        {% if ticket.estado != "Listo" and role != "Normal" %}
                         <button onclick="eliminar('')" class = "btn btn-primary">Iniciar</button>
                     {% endif %}
     			</td>
