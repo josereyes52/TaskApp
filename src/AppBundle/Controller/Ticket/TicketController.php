@@ -78,14 +78,14 @@ class TicketController extends Controller
                      ->findBy(array(
                                 'ticketId'=>$ticket->getId()
                              )
-                     )[0];
+                     );
 //        var_dump($nota->nombre);die;
 
         return $this->render("@App/Ticket/ver_ticket.html.twig",
             [
                 "ticket" => $ticket,
                 "roles" => $this->getUser()->getRoles()[0],
-                "notas" => array($nota),
+                "notas" => $nota,
                 "usuario"=> $this->getUser()->getNombre()
             ]
         );

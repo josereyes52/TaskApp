@@ -21,7 +21,7 @@
     <form style="width: 49%; display: inline-block;">
         <div class="form-group">
             <h3 style="display:inline-block;width: 100px;">Notas</h3>
-            <span><a href="{{ path('agregar_nota') }}" style ="padding-top: 0px;padding-bottom: 4px;"class = "btn btn-success">Agregar Notas</a></span>
+            <span><span style ="padding-top: 0px;padding-bottom: 4px;"class = "btn btn-success add-note" data-toggle="modal" data-target="#myModal" >Agregar Notas</span></span>
             <table class="table table-striped">
                 <thead>
                     <th scope="col">Usuario</th>
@@ -59,7 +59,57 @@
     <input type="hidden" id="usuarioAsignadoId" value="{{ ticket.usuarioAsignado.id }}">
     <input type="hidden" id="fechaCreada" value="{{ ticket.fechaCreada|date('Y-m-d H:i:s') }}">
 
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Agregar Nota</h4>
+                </div>
+                <div class="modal-body">
+                    <textarea class="form-control" name="" id="comentario" cols="50" rows="10"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="registrar()">Agregar</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <script>
+
+        function registrar() {
+            var ticketId = $('#id').val();
+            var comentario = $('#comentario').val();
+            var fecha = $('#fechaCreada').val();
+            var usuarioId = $('#usuarioId').val();
+
+
+            var data = {
+                ticketId: ticketId,
+                usuarioId: usuarioId,
+                comentario: comentario,
+                fecha: fecha
+            };
+            $.ajax({
+                url: Routing.generate('guardar_nota'),
+                type: 'POST',
+                data: JSON.stringify(data),
+                success: function (response) {
+                    console.log(response);
+                    window.location.reload();
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            })
+        }
+
+
         function actualizarEstato(){
             var id = $('#id').val();
             var estado = $('#estado').text();

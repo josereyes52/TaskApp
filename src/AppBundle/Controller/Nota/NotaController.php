@@ -83,22 +83,22 @@ class NotaController extends Controller
 //
 //    }
 
-    /**
-     *
-     * @Route("/nota", options={"expose"=true} ,name="agregar_nota")
-     */
-    public function indexNota(){
-        $nota = $this->getDoctrine()
-            ->getRepository(Nota::class)
-            ->findBy(array('ticketId'=>2));
-        var_dump($nota);die;
-        return $this->render("@App/Nota/registrar_nota.html.twig",
-            [
-                "nota" => $nota
-            ]
-        );
-
-    }
+//    /**
+//     *
+//     * @Route("/nota", options={"expose"=true} ,name="agregar_nota")
+//     */
+//    public function indexNota(){
+//        $nota = $this->getDoctrine()
+//            ->getRepository(Nota::class)
+//            ->findBy(array('ticketId'=>2));
+////        var_dump($nota);die;
+//        return $this->render("@App/Nota/registrar_nota.html.twig",
+//            [
+//                "nota" => $nota
+//            ]
+//        );
+//
+//    }
 
 
 
