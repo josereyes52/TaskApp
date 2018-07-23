@@ -39,10 +39,32 @@ class Usuario implements UserInterface
     private $tickets;
 
     /**
+     * $notas
+     * @ORM\OneToMany(targetEntity="Nota", mappedBy="usuarioId")
+     */
+    private $notas;
+
+    /**
      * @var $ticketsAsignados
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\ticket", mappedBy="usuarioAsignado")
      */
     private $ticketsAsignados;
+
+    /**
+     * @return mixed
+     */
+    public function getNotas()
+    {
+        return $this->notas;
+    }
+
+    /**
+     * @param mixed $notas
+     */
+    public function setNotas($notas)
+    {
+        $this->notas = $notas;
+    }
 
     /**
      * @return mixed
@@ -64,6 +86,7 @@ class Usuario implements UserInterface
     {
         $this->tickets = new ArrayCollection();
         $this->ticketsAsignados = new ArrayCollection();
+        $this->notas = new ArrayCollection();
     }
 
     /**

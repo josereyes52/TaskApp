@@ -29,16 +29,18 @@ class Nota
     private $fecha;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="ticket_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="ticket",inversedBy="notas")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="ticket_id", referencedColumnName="id")
+     * })
      */
     private $ticketId;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="usuario_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Usuario",inversedBy="notas")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="usuario_id", referencedColumnName="id")
+     * })
      */
     private $usuarioId;
 

@@ -6,7 +6,7 @@
     <div style="text-align: left;">
         <h1 style="display:inline-block;width: 45%;">Asignación #{{ ticket.id }}</h1>
         <span id="fechaCompletada">{{ ticket.fechaCompletada|date('Y-m-d H:i:s') }}</span>
-        {% if ticket.estado != "Listo" %}
+        {% if ticket.estado != "Listo" and roles != "Normal" %}
             <span><button style="text-transform: uppercase;" class = "btn btn-primary" onclick="actualizarEstato()">Iniciar</button></span>
         {% endif %}
         <br>
@@ -21,7 +21,37 @@
     <form style="width: 49%; display: inline-block;">
         <div class="form-group">
             <h3 style="display:inline-block;width: 100px;">Notas</h3>
-            <span><button style ="padding-top: 0px;padding-bottom: 4px;"class = "btn btn-success">Agregar Notas</button></span>
+            <span><a href="{{ path('agregar_nota') }}" style ="padding-top: 0px;padding-bottom: 4px;"class = "btn btn-success">Agregar Notas</a></span>
+            <table class="table table-striped">
+                <thead>
+                    <th scope="col">Usuario</th>
+                    <th scope="col">Comentario</th>
+                    <th scope="col">Fecha</th>
+                    {#<th scope="col">Accion</th>#}
+                </thead>
+                <tbody>
+                {% for nota in notas %}
+                <tr>
+                    <td>
+                     {% if nota.usuarioid.nombre != usuario %}
+                        {{ nota.usuarioid.nombre }}
+                    {% else %}
+                        Yo
+                    {% endif %}
+                    </td>
+
+                    <td>{{ nota.comentario }}</td>
+                    <td>{{ nota.fecha|date('Y-m-d') }}</td>
+                    {#<td>#}
+                        {#<a href="{{ path('ver_ticket',{'id':ticket.id}) }}" class="btn btn-success">Ver</a>#}
+                        {#{% if ticket.estado != "Listo" and role != "Normal" %}#}
+                            {#<button onclick="eliminar('')" class = "btn btn-primary">Iniciar</button>#}
+                        {#{% endif %}#}
+                    {#</td>#}
+                <tr>
+                {% endfor %}
+                </tbody>
+            </table>
         <div>
     </form>
     <input type="hidden" id="id" value="{{ ticket.id }}">

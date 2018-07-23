@@ -53,6 +53,12 @@ class ticket
     private $usuario;
 
     /**
+     * $notas
+     * @ORM\OneToMany(targetEntity="Nota", mappedBy="ticketId")
+     */
+    private $notas;
+
+    /**
      * @var int
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Usuario", inversedBy="ticketsAsignados")
@@ -66,6 +72,27 @@ class ticket
      * @ORM\Column(name="estado", type="string", length=255)
      */
     private $estado;
+
+    public function __construct()
+    {
+        $this->notas = new ArrayCollection();
+    }
+
+    /**
+     * @return int
+     */
+    public function getNotas()
+    {
+        return $this->notas;
+    }
+
+    /**
+     * @param int $notas
+     */
+    public function setNotas($notas)
+    {
+        $this->notas = $notas;
+    }
 
     /**
      * @return int

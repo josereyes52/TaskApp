@@ -2,6 +2,7 @@
 
 
 namespace AppBundle\Controller\Ticket;
+use AppBundle\Entity\Nota;
 use AppBundle\Entity\ticket;
 use AppBundle\Form\TicketType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -72,10 +73,20 @@ class TicketController extends Controller
      */
 
     public function indexVerTicket(Ticket $ticket){
+        $nota =$this->getDoctrine()
+                     ->getRepository(Nota::class)
+                     ->findBy(array(
+                                'ticketId'=>$ticket->getId()
+                             )
+                     )[0];
+//        var_dump($nota->nombre);die;
 
         return $this->render("@App/Ticket/ver_ticket.html.twig",
             [
-                "ticket" => $ticket
+                "ticket" => $ticket,
+                "roles" => $this->getUser()->getRoles()[0],
+                "notas" => array($nota),
+                "usuario"=> $this->getUser()->getNombre()
             ]
         );
 

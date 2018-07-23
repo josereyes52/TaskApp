@@ -23,8 +23,8 @@
     	{% for ticket in tickets %}
     		<tr>
     			<td>{{ ticket.id}}</td>
-    			<td>{{ ticket.fechaCreada|date('Y-m-d H:i:s')}}</td>
-    			<td>{{ ticket.fechaCompletada|date('Y-m-d H:i:s') }}</td>
+    			<td>{{ ticket.fechaCreada|date('Y-m-d')}}</td>
+    			<td>{{ ticket.fechaCompletada|date('Y-m-d') }}</td>
                 <td>{{ ticket.estado}}</td>
                 <td>{{ ticket.usuario.nombre}}</td>
                 <td>{{ ticket.usuarioAsignado.nombre}}</td>

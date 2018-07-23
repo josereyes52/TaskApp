@@ -12,6 +12,7 @@ use AppBundle\Entity\Usuario;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UsuarioController extends Controller
 {
@@ -111,11 +112,14 @@ class UsuarioController extends Controller
 	 * @Method("POST")
 	 * @param Request $request
 	 */
-	public function guardarUsuarios(Request $request){
+	public function guardarUsuarios(Request $request, UserPasswordEncoderInterface $passwordEncoder){
 		$data = json_decode($request->getContent(), true);
 		$usuario = new Usuario();
         $form = $this->createForm(UsuarioType::class, $usuario);
         $form->submit($data);
+
+        $password = $passwordEncoder->encodePassword($usuario, $usuario->getContrasena());
+        $usuario->setContrasena($password);
 
 		$jsonContent = $this->get('serializer')->serialize($usuario,'json');
 
