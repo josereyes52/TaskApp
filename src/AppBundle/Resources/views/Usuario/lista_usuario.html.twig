@@ -30,7 +30,7 @@
     <script>
         function eliminar(id){
             $.ajax({
-                url:'/app_dev.php/usuario/'+id,
+                url:Routing.generate('eliminar_usuario', {id: id}),
                 type:'DELETE',
                 success: function(response){
                     window.location.href=window.location
